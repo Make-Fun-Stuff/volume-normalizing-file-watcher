@@ -1,19 +1,21 @@
 import ffmpeg from 'fluent-ffmpeg'
 
-export const getVolume = async (source: string): Promise<{ mean: number; max: number }> => {
-  return new Promise(function (resolve, reject) {
+export const getVolume = async (source: string): Promise<{ mean: number; max: number } | void> => {
+  return new Promise(function (resolve, _reject) {
     ffmpeg({ source })
       .withAudioFilter('volumedetect')
       .addOption('-f', 'null')
       .on('error', function (error) {
-        reject(error)
+        console.log(error)
+        resolve()
       })
       .on('end', function (_stdout, stderr) {
         const match = stderr.match(
           'mean_volume: (-?[0-9.]+) dB[\\S\\s]+ max_volume: (-?[0-9.]+) dB'
         )
         if (!match) {
-          reject(new Error(`Unable to parse out mean/max volume from ${source}`))
+          console.log(`Unable to parse out mean/max volume from ${source}`)
+	  resolve()
         }
         resolve({
           mean: Number(match[1]),
@@ -35,6 +37,9 @@ export const setVolume = async (request: {
 }): Promise<void> => {
   console.log(`Volume change request: ${JSON.stringify(request, null, 2)}`)
   const volume = await getVolume(request.source)
+  if (!volume) {
+    return
+  }
   const delta = getDelta(request.targetMeanVolume, volume.mean)
   console.log(`Detected Volume: ${JSON.stringify(volume, null, 2)} (Delta: ${delta} db)`)
 

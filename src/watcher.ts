@@ -45,7 +45,7 @@ const handleAddFile = (req: {
   const destination = `${req.destinationDir}/${dir ? `${dir}/` : ''}${cleanFilename(fname)}`
   delay(3000).then((_) => {
     try {
-      setVolume({ source: req.path, destination, targetMeanVolume: req.targetMeanVolume })
+      setVolume({ source: req.path, destination, targetMeanVolume: req.targetMeanVolume }).then(console.log).catch(console.log)
     } catch (e) {
       console.log(`Something went wrong with file: ${req.path}`)
       console.log(e)
