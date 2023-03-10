@@ -10,8 +10,8 @@ if (!argv.sourceDir) {
 if (!argv.targetDir) {
   throw Error(`Missing --targetDir argument`)
 }
-if (!argv.targedDb) {
-  throw Error(`Missing --targedDb argument`)
+if (!argv.targetDb) {
+  throw Error(`Missing --targetDb argument`)
 }
 
-watch(argv.sourceDir, argv.targetDir, parseInt(argv.targedDb))
+watch(argv.sourceDir, argv.targetDir, parseInt(argv.targetDb))
