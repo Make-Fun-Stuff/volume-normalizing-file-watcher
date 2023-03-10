@@ -33,6 +33,11 @@ const handleAddFile = (req: {
     }
   }
 
+  if (fname.startsWith('.')) {
+    console.log(`Ignoring hidden file`)
+    return
+  }
+
   const destination = `${req.destinationDir}/${dir ? `${dir}/` : ''}${cleanFilename(fname)}`
   setVolume({ source: req.path, destination, targetMeanVolume: req.targetMeanVolume })
 }
