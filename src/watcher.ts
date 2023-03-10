@@ -5,6 +5,10 @@ import { cleanFilename, removeLeadingSlash, removeTrailingSlash } from './util'
 
 let WATCHER_READY = false
 
+const delay = (ms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 const handleAddFile = (req: {
   path: string
   sourceDir: string
@@ -39,7 +43,9 @@ const handleAddFile = (req: {
   }
 
   const destination = `${req.destinationDir}/${dir ? `${dir}/` : ''}${cleanFilename(fname)}`
-  setVolume({ source: req.path, destination, targetMeanVolume: req.targetMeanVolume })
+  delay(3000).then((_) => {
+    setVolume({ source: req.path, destination, targetMeanVolume: req.targetMeanVolume })
+  })
 }
 
 export const watch = (sourceDir: string, destinationDir: string, targetDb: number) => {
