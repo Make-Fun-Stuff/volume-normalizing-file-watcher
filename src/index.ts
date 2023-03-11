@@ -11,7 +11,13 @@ if (!argv.targetDir) {
   throw Error(`Missing --targetDir argument`)
 }
 if (!argv.targetDb) {
-  throw Error(`Missing --targetDb argument`)
+  throw Error(`Missing --trackTargetDb argument`)
+}
+if (!argv.targetDb) {
+  throw Error(`Missing --soundboardTargetDb argument`)
 }
 
-watch(argv.sourceDir, argv.targetDir, parseInt(argv.targetDb))
+watch(argv.sourceDir, argv.targetDir, {
+  track: parseInt(argv.trackTargetDb),
+  sound: parseInt(argv.soundboardTargetDb),
+})

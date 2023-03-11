@@ -13,7 +13,7 @@ const handleAddFile = (req: {
   path: string
   sourceDir: string
   destinationDir: string
-  targetMeanVolume: number
+  targetDb: { track: number; sound: number }
 }) => {
   if (!req.path.endsWith('.mp3')) {
     return
@@ -45,7 +45,15 @@ const handleAddFile = (req: {
   const destination = `${req.destinationDir}/${dir ? `${dir}/` : ''}${cleanFilename(fname)}`
   delay(3000).then((_) => {
     try {
-      setVolume({ source: req.path, destination, targetMeanVolume: req.targetMeanVolume }).then(console.log).catch(console.log)
+      setVolume({
+        source: req.path,
+        destination,
+        targetMeanVolume: req.path.toLowerCase().includes('soundboard')
+          ? req.targetDb.sound
+          : req.targetDb.track,
+      })
+        .then(console.log)
+        .catch(console.log)
     } catch (e) {
       console.log(`Something went wrong with file: ${req.path}`)
       console.log(e)
@@ -53,7 +61,11 @@ const handleAddFile = (req: {
   })
 }
 
-export const watch = (sourceDir: string, destinationDir: string, targetDb: number) => {
+export const watch = (
+  sourceDir: string,
+  destinationDir: string,
+  targetDb: { track: number; sound: number }
+) => {
   const cleanedDestinationDir = removeTrailingSlash(destinationDir)
   chokidar
     .watch(sourceDir)
@@ -67,7 +79,7 @@ export const watch = (sourceDir: string, destinationDir: string, targetDb: numbe
           path: removeTrailingSlash(path),
           sourceDir,
           destinationDir: cleanedDestinationDir,
-          targetMeanVolume: targetDb,
+          targetDb,
         })
       }
     })
