@@ -10,10 +10,10 @@ if (!argv.sourceDir) {
 if (!argv.targetDir) {
   throw Error(`Missing --targetDir argument`)
 }
-if (!argv.targetDb) {
+if (!argv.trackTargetDb) {
   throw Error(`Missing --trackTargetDb argument`)
 }
-if (!argv.targetDb) {
+if (!argv.soundboardTargetDb) {
   throw Error(`Missing --soundboardTargetDb argument`)
 }
 
